@@ -110,8 +110,8 @@ O backend foi desenvolvido em **Python** com **FastAPI** e centraliza a comunica
 
 Antes de executar, é necessário ter instalado:
 
-- Python 3.10 ou superior;
-- `pip`;
+- Python 3.10 ou superior; (link: https://www.python.org/downloads/)
+- `pip`; (link: https://pypi.org/project/pip/)
 - acesso à internet para conexão com MongoDB e Redis;
 - os arquivos de frontend na mesma pasta do `main.py`.
 
