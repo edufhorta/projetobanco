@@ -107,28 +107,6 @@ async def cadastro(usuario: Usuario):
     except Exception as e:
         return {"success": False, "message": f"Erro ao cadastrar: {str(e)}"}
 
-@app.post("/mudarsenha")
-async def mudar_senha(usuario: Usuario):
-    try:
-        # Verificar se o usuário já existe
-        resultado = con.execute(
-            "SELECT COUNT(*) FROM client WHERE nome = ?",
-            [usuario.nome]
-        ).fetchall()
-        
-        if resultado[0][0] <= 0:
-            return {"success": False, "message": "Usuário não existe!"}
-        
-        # Inserir novo usuário
-        con.execute(
-            "UPDATE client SET senha = ? WHERE nome = ?",
-            [usuario.senha, usuario.nome]
-        )
-        con.commit()
-        
-        return {"success": True, "message": "Senha alterada com sucesso!"}
-    except Exception as e:
-        return {"success": False, "message": f"Erro ao alterar senha: {str(e)}"}
 
 @app.get("/catalogo")
 async def catalogo():
