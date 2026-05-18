@@ -34,7 +34,7 @@ async def no_cache_middleware(request: Request, call_next):
     return response
 
 # Conectar ao banco de dados
-con = duckdb.connect("C:\\Users\\Duhor\\OneDrive\\Documentos\\GitHub\\projeto banco\\bancoProjeto.duckdb")
+con = duckdb.connect("./bancoProjeto.duckdb")
 client = pymongo.MongoClient("mongodb+srv://dudifhorta_db_user:5RFIaJ4LVEPjTOqV@databasebancos.fppym0m.mongodb.net/")
 
 
