@@ -47,7 +47,7 @@ O DuckDB foi utilizado para armazenar os dados de usuários, como nome e senha. 
 
 - dados estruturados;
 - uso de consultas SQL;
-- facilidade para validação de login e atualização de senha.
+- facilidade para validação de login.
 
 ### MongoDB (Document Storage)
 
