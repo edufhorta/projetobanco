@@ -120,7 +120,6 @@ Antes de executar, é necessário ter instalado:
 ```bash
 pip install fastapi uvicorn duckdb pymongo redis pydantic
 ```
-
 ### Configuração
 
 O backend utiliza:
@@ -157,6 +156,3 @@ Para atender aos requisitos do trabalho, o repositório deve conter:
 - os arquivos de frontend;
 - todos os recursos necessários para rodar o projeto em um ambiente novo.
 
-## Observação final
-
-Este projeto demonstra o uso de **persistência poliglota**, escolhendo cada banco de dados com base no tipo de dado armazenado e no tipo de operação realizada pela aplicação.
