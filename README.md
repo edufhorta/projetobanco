@@ -1,321 +1,162 @@
-#Projeto: concecionária
+# Concessionária - Projeto de Banco de Dados
 
-#Tema escolhido
+## Sobre o projeto
 
-Este projeto implementa um sistema de catálogo e pedidos de carros seguindo a proposta de Concecionária. A ideia é usar diferentes bancos de dados de acordo com o tipo de informação e com a forma como ela é utilizada pela aplicação.
+Este projeto implementa um sistema de **catálogo e pedidos de carros** com base no conceito de **persistência poliglota (Polyglot Persistence)**. A proposta é utilizar diferentes bancos de dados de acordo com o tipo de informação e a necessidade da aplicação.
 
-##No sistema, o usuário pode:
+O sistema permite:
 
+- cadastro de usuários;
+- login;
+- alteração de senha;
+- visualização do catálogo de carros;
+- adição de carros ao catálogo;
+- remoção de carros do catálogo;
+- realização de pedidos;
+- listagem de pedidos;
+- cancelamento de pedidos;
+- atualização do status dos pedidos.
 
+## Arquitetura
 
+O projeto segue a estrutura solicitada no enunciado, com **frontend**, **backend**, **um banco relacional** e **dois bancos não relacionais**.
 
-
-realizar cadastro, login e troca de senha;
-
-
-
-visualizar o catálogo de carros;
-
-
-
-adicionar e remover carros do catálogo;
-
-
-
-fazer pedidos;
-
-
-
-listar pedidos;
-
-
-
-cancelar pedidos;
-
-
-
-atualizar o status de um pedido.
-
-Arquitetura do projeto
-
-O projeto segue o modelo pedido no enunciado, com frontend se comunicando com o backend, e o backend se comunicando com três bancos distintos: um relacional e dois não relacionais.
-
+```mermaid
 graph LR
     FE <--> BE
     BE <--> DuckDB
     BE <--> MongoDB
     BE <--> Redis
+```
 
+### Componentes
 
+- **FE (Frontend):** páginas HTML servidas pelo backend para interação com o usuário.
+- **BE (Backend):** aplicação em Python com FastAPI, responsável por receber as requisições e acessar os bancos de dados.
+- **DuckDB:** banco relacional utilizado para armazenar os dados dos usuários.
+- **MongoDB:** banco orientado a documentos utilizado para armazenar o catálogo de carros.
+- **Redis:** banco chave-valor utilizado para armazenar os pedidos.
 
+## Justificativa dos bancos utilizados
 
+### DuckDB (Relacional)
 
+O DuckDB foi utilizado para armazenar os dados de usuários, como nome e senha. Esse tipo de dado possui estrutura fixa e se encaixa bem no modelo relacional.
 
-FE: páginas HTML servidas pelo backend para interação do usuário.
+**Motivos da escolha:**
 
+- dados estruturados;
+- uso de consultas SQL;
+- facilidade para validação de login e atualização de senha.
 
+### MongoDB (Document Storage)
 
-BE: aplicação em Python com FastAPI, responsável por receber as requisições e acessar os bancos.
+O MongoDB foi usado para armazenar o catálogo de carros. Como os carros são tratados como documentos, esse modelo facilita inserção, leitura e remoção de dados sem depender de um esquema rígido.
 
+**Motivos da escolha:**
 
+- flexibilidade no armazenamento dos carros;
+- manipulação direta com objetos/dicionários;
+- simplicidade nas operações de catálogo.
 
-DuckDB: banco relacional usado para armazenar clientes/usuários.
+### Redis (Chave-valor)
 
+O Redis foi utilizado para armazenar os pedidos. Cada pedido é salvo com uma chave própria, contendo informações como carro, quantidade, cidade e status.
 
+**Motivos da escolha:**
 
-MongoDB: banco orientado a documentos usado para armazenar o catálogo de carros.
+- acesso rápido por identificador;
+- estrutura simples para pedidos;
+- facilidade de atualização de status.
 
+## Backend e rotas principais
 
+O backend foi desenvolvido em **Python** com **FastAPI** e centraliza a comunicação entre o frontend e os três bancos de dados.
 
-Redis: banco chave-valor usado para armazenar pedidos.
+### Rotas de usuários
 
-Justificativa dos bancos usados
+- `POST /login`
+- `POST /cadastro`
+- `POST /mudarsenha`
 
-1. DuckDB (Relacional)
+### Rotas de catálogo
 
-O DuckDB foi utilizado para armazenar os dados de usuários/clientes, com campos como nome e senha. Esse tipo de dado possui estrutura bem definida e combina com o modelo relacional.
+- `GET /catalogo`
+- `GET /dados`
+- `POST /adicionar`
+- `POST /deletar`
 
-Ele foi escolhido porque:
+### Rotas de pedidos
 
+- `GET /pedido`
+- `GET /pedidos`
+- `POST /fazer_pedido`
+- `POST /cancelar_pedido`
+- `POST /atualizar_pedido`
 
+## Tecnologias utilizadas
 
+- **Python**
+- **FastAPI**
+- **Uvicorn**
+- **DuckDB**
+- **MongoDB**
+- **Redis**
+- **Pydantic**
 
+## Como executar o projeto
 
-os dados de usuários são estruturados;
-
-
-
-operações como busca, validação e atualização de senha são naturalmente relacionais;
-
-
-
-o backend faz consultas SQL diretamente sobre a tabela client.
-
-2. MongoDB (Document Storage)
-
-O MongoDB foi usado para armazenar os carros do catálogo. Como cada carro é tratado como um documento, esse modelo facilita inserir, listar e remover itens sem exigir um esquema rígido.
-
-Ele foi escolhido porque:
-
-
-
-
-
-o catálogo pode ser representado naturalmente como documentos;
-
-
-
-a aplicação já manipula os carros como dict;
-
-
-
-operações de inserção, listagem e remoção ficam simples.
-
-3. Redis (NoSQL chave-valor)
-
-O Redis foi usado para os pedidos. Cada pedido é salvo com uma chave no formato pedido:id, contendo informações como carro, quantidade, cidade e status.
-
-Ele foi escolhido porque:
-
-
-
-
-
-pedidos podem ser acessados rapidamente por identificador;
-
-
-
-o modelo chave-valor atende bem ao fluxo de criação, consulta, atualização e remoção;
-
-
-
-o status do pedido pode ser alterado com facilidade.
-
-Implementação do backend
-
-O backend foi implementado em Python usando FastAPI.
-
-Ele centraliza o acesso aos três bancos e expõe rotas HTTP para as operações da aplicação. Entre as principais rotas implementadas estão:
-
-Usuários
-
-
-
-
-
-POST /login
-
-
-
-POST /cadastro
-
-
-
-POST /mudarsenha
-
-Catálogo
-
-
-
-
-
-GET /catalogo
-
-
-
-GET /dados
-
-
-
-POST /adicionar
-
-
-
-POST /deletar
-
-Pedidos
-
-
-
-
-
-GET /pedido
-
-
-
-GET /pedidos
-
-
-
-POST /fazer_pedido
-
-
-
-POST /cancelar_pedido
-
-
-
-POST /atualizar_pedido
-
-Assim, o backend atende ao requisito de realizar operações de CRUD ao longo dos serviços da aplicação, conforme solicitado no enunciado.
-
-Como executar o projeto
-
-Pré-requisitos
+### Pré-requisitos
 
 Antes de executar, é necessário ter instalado:
 
+- Python 3.10 ou superior;
+- `pip`;
+- acesso à internet para conexão com MongoDB e Redis;
+- os arquivos de frontend na mesma pasta do `main.py`.
 
+### Instalação das dependências
 
-
-
-Python 3.10 ou superior;
-
-
-
-pip;
-
-
-
-acesso à internet para conexão com MongoDB e Redis;
-
-
-
-os arquivos frontend na mesma pasta do main.py, como index.html, catalogo.html e pedido.html.
-
-Instalação das dependências
-
-Instale as bibliotecas Python usadas no projeto:
-
+```bash
 pip install fastapi uvicorn duckdb pymongo redis pydantic
+```
 
-
-Configuração necessária
+### Configuração
 
 O backend utiliza:
 
+- um arquivo DuckDB local;
+- uma conexão com MongoDB Atlas;
+- uma instância Redis remota.
 
+**Importante:**
 
+- o caminho do DuckDB está fixado no código e pode precisar ser alterado na sua máquina;
+- as credenciais do MongoDB e do Redis estão definidas diretamente no arquivo `main.py`.
 
+### Execução
 
-um arquivo DuckDB local;
+Para iniciar o servidor, execute:
 
-
-
-uma conexão com MongoDB Atlas;
-
-
-
-uma instância Redis remota.
-
-Importante:
-
-
-
-
-
-o caminho do DuckDB está fixado no código e pode precisar ser ajustado para a sua máquina;
-
-
-
-as credenciais de MongoDB e Redis estão definidas diretamente no arquivo main.py.
-
-Execução
-
-Para iniciar o servidor:
-
+```bash
 python main.py
+```
 
+A aplicação será executada localmente em:
 
-O sistema será executado localmente em:
-
+```bash
 http://127.0.0.1:8000
+```
 
+## Estrutura esperada no repositório
 
-Serviços utilizados
+Para atender aos requisitos do trabalho, o repositório deve conter:
 
-Os serviços/bancos utilizados no projeto são:
+- todo o código-fonte desenvolvido;
+- o arquivo `README.md`;
+- os arquivos de frontend;
+- todos os recursos necessários para rodar o projeto em um ambiente novo.
 
+## Observação final
 
-
-
-
-DuckDB para usuários;
-
-
-
-MongoDB para catálogo de carros;
-
-
-
-Redis para pedidos;
-
-
-
-FastAPI/Uvicorn para o backend web.
-
-Recursos necessários no repositório
-
-Para atender ao enunciado, o repositório deve conter:
-
-
-
-
-
-todo o código-fonte do projeto;
-
-
-
-este README.md;
-
-
-
-os arquivos de frontend;
-
-
-
-qualquer recurso necessário para executar o sistema em um ambiente novo.
-
-
-
- 
+Este projeto demonstra o uso de **persistência poliglota**, escolhendo cada banco de dados com base no tipo de dado armazenado e no tipo de operação realizada pela aplicação.
