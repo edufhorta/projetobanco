@@ -1,6 +1,6 @@
 #Projeto: concecionária
 
-T#ema escolhido
+#Tema escolhido
 
 Este projeto implementa um sistema de catálogo e pedidos de carros seguindo a proposta de Concecionária. A ideia é usar diferentes bancos de dados de acordo com o tipo de informação e com a forma como ela é utilizada pela aplicação.
 
